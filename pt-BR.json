@@ -1,0 +1,32 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "status do metrô",
+            "intents": [
+                {
+                    "name": "CheckStatusIntent",
+                    "slots": [],
+                    "samples": [
+                        "qual o status do metrô",
+                        "como está o metrô",
+                        "qual a situação do metrô",
+                        "status do metrô"
+                    ]
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                }
+            ],
+            "types": []
+        }
+    }
+}

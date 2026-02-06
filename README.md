@@ -1,66 +1,78 @@
-# Status das Linhas de Transporte
+# Alexa Skill - Status do Metrô de São Paulo
 
-Este projeto é uma skill para a Alexa que permite aos usuários consultar o status das linhas de transporte da Viamobilidade. A skill utiliza web scraping para coletar informações atualizadas sobre o estado das linhas de transporte, como "Operação Normal", "Operação Parcial" ou "Operação Interrompida".
+Esta é uma skill da Alexa que informa o status das linhas do Metrô e da CPTM de São Paulo.
 
-## Funcionalidades
+## Como funciona
 
-- **Verificar Status**: Usuários podem perguntar sobre o status das linhas de transporte e receber respostas detalhadas, incluindo razões para o status atual.
-- **Ajuda**: Fornece informações sobre como usar a skill.
-- **Tratamento de Erros**: Responde de forma adequada em caso de erros ou falhas na solicitação.
+A skill utiliza a API [metro-sp-api](https://github.com/ale-jr/metro-sp-api) para obter o status das linhas em tempo real.
 
-## Tecnologias Utilizadas
+## Como implantar na AWS
 
-- Python
-- BeautifulSoup: Para web scraping das informações do site da Viamobilidade.
-- AWS Lambda: Para implementar a skill.
-- ask-sdk-core: Para construir a skill da Alexa.
+1.  **Crie uma função Lambda:**
+    *   Acesse o [console da AWS](https://aws.amazon.com/console/).
+    *   Vá para o serviço Lambda e crie uma nova função.
+    *   Use as seguintes configurações:
+        *   **Nome da função:** `metro-sp-status`
+        *   **Runtime:** Python 3.9
+        *   **Arquitetura:** x86_64
+    *   Clique em "Criar função".
 
-## Pré-requisitos
+2.  **Faça o upload do código:**
+    *   Na guia "Código-fonte", clique em "Fazer upload de".
+    *   Selecione "Arquivo .zip".
+    *   Faça o upload do arquivo `metro-sp-status.zip` que você criou.
+    *   Clique em "Salvar".
 
-Antes de executar o projeto, você precisa ter:
+3.  **Configure o gatilho da Alexa:**
+    *   Na guia "Gatilhos", clique em "Adicionar gatilho".
+    *   Selecione "Alexa" na lista de gatilhos.
+    *   O Alexa Skills Kit será habilitado automaticamente.
+    *   Anote o ARN da sua função Lambda. Você precisará dele mais tarde.
 
-- Python 3.x instalado.
-- A biblioteca `requests` e `beautifulsoup4` instaladas. Você pode instalá-las usando o pip:
+4.  **Crie a skill na Amazon Developer Console:**
+    *   Acesse o [console de desenvolvedor da Amazon](https://developer.amazon.com/alexa/console/ask).
+    *   Clique em "Criar skill".
+    *   Use as seguintes configurações:
+        *   **Nome da skill:** Status do Metrô de São Paulo
+        *   **Idioma padrão:** Português (Brasil)
+        *   **Modelo:** Personalizado
+        *   **Método de hospedagem:** Provisionado pela AWS
+    *   Clique em "Criar skill".
+    *   Escolha o modelo "Começar do zero".
 
-```bash
-pip install requests beautifulsoup4 ask-sdk-core
-```
+5.  **Configure a skill:**
+    *   **Invocação:** Defina o nome de invocação da skill como "status do metrô".
+    *   **Modelos de interação:**
+        *   Vá para o "Editor de JSON" e cole o conteúdo do arquivo `pt-BR.json` que se encontra na raiz do projeto.
+        *   Clique em "Salvar modelo".
+    *   **Endpoint:**
+        *   Selecione "AWS Lambda ARN".
+        *   Cole o ARN da sua função Lambda que você anotou anteriormente.
+    *   Clique em "Salvar endpoints".
 
-## Como Usar
+6.  **Teste a skill:**
+    *   Vá para a guia "Teste" e ative o teste para "Desenvolvimento".
+    *   Use o simulador para testar a skill. Você pode dizer "abrir status do metrô" para iniciar.
 
-	1.	Configurar a Skill na AWS:
-	•	Crie uma nova skill na Alexa Developer Console.
-	•	Configure a interação, definindo as intents necessárias (como CheckStatusIntent).
-	•	Faça o upload do código como uma função Lambda.
-	2.	Testar a Skill:
-	•	Use o simulador da Alexa Developer Console ou um dispositivo habilitado para Alexa.
-	•	Diga “Alexa, perguntar o status das linhas de transporte” para obter o status atual.
+## Como criar o pacote de implantação
 
-## Estrutura do Código
+Para criar o arquivo `metro-sp-status.zip`, siga estas etapas:
 
-## Funções Principais
+1.  Instale as dependências:
+    ```bash
+    pip install -r requirements.txt -t ./package
+    ```
+2.  Copie o diretório `src` para o diretório `package`:
+    ```bash
+    cp -r src ./package
+    ```
+3.  Copie o arquivo `lambda_function.py` para o diretório `package`:
+    ```bash
+    cp lambda_function.py ./package
+    ```
+4.  Compacte o conteúdo do diretório `package` em um arquivo `metro-sp-status.zip`:
+    ```bash
+    cd package && zip -r ../metro-sp-status.zip . && cd ..
+    ```
 
-	•	get_status(): Coleta e processa informações do site da Viamobilidade para extrair o status das linhas.
-	•	CheckStatusIntentHandler: Trata a intenção CheckStatusIntent e fornece a resposta ao usuário.
-	•	HelpIntentHandler: Fornece ajuda sobre como usar a skill.
-	•	CancelAndStopIntentHandler: Trata intenções de cancelamento e parada.
-	•	ErrorHandler: Gerencia erros e fornece feedback ao usuário.
-
-## Exemplo de Resposta
-
-```
-Quando um usuário pergunta sobre o status, a skill retorna uma resposta como:
-
-
-"A linha X está com status de Operação Normal. A última atualização foi em 01/10/2024 12:00:00."
-
-```
- ## Contribuição
-
-Contribuições são bem-vindas! Se você deseja melhorar este projeto, sinta-se à vontade para abrir um pull request ou criar um issue.
-
-## Licença
-
-Este projeto está licenciado sob a MIT License.
-
-Sinta-se à vontade para personalizar o conteúdo conforme necessário!
+Agora você pode usar o arquivo `metro-sp-status.zip` para implantar a skill na AWS.
